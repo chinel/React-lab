@@ -11,6 +11,7 @@ import { Separator } from "@/components/ui/separator";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SignInFlow } from "../types";
+import { useState } from "react";
 
 interface SignUpCardProps {
   setState: (state: SignInFlow) => void;
