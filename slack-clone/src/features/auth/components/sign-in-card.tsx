@@ -22,9 +22,13 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
   const { signIn } = useAuthActions();
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
+  const [pending, setPending] = useState<boolean>(false);
 
-  const handleProviderSignIn = (provider: "github" | "google") => {
-    signIn(provider);
+  const onProviderSignIn = (provider: "github" | "google") => {
+    setPending(true);
+    signIn(provider).finally(() => {
+      setPending(false);
+    });
   };
   return (
     <Card className="w-full h-full p-8">
@@ -53,15 +57,15 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
             type="password"
             required
           />
-          <Button type="submit" className="w-full" size="lg" disabled={false}>
+          <Button type="submit" className="w-full" size="lg" disabled={pending}>
             Continue
           </Button>
         </form>
         <Separator />
         <div className="flex flex-col gap-y-2.5">
           <Button
-            disabled={false}
-            onClick={() => {}}
+            disabled={pending}
+            onClick={() => onProviderSignIn("google")}
             variant="outline"
             size="lg"
             className="w-full relative"
@@ -71,8 +75,8 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
           </Button>
 
           <Button
-            disabled={false}
-            onClick={() => handleProviderSignIn("github")}
+            disabled={pending}
+            onClick={() => onProviderSignIn("github")}
             variant="outline"
             size="lg"
             className="w-full relative"
