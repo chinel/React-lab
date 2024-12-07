@@ -11,8 +11,9 @@ import { Separator } from "@/components/ui/separator";
 import { FaGithub } from "react-icons/fa";
 import { FcGoogle } from "react-icons/fc";
 import { SignInFlow } from "../types";
-import { useState } from "react";
+import React, { useState } from "react";
 import { useAuthActions } from "@convex-dev/auth/react";
+import { TriangleAlert } from "lucide-react"; // this was installed by shadcn-ui
 
 interface SignInCardProps {
   setState: (state: SignInFlow) => void;
@@ -23,6 +24,20 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
   const [email, setEmail] = useState<string>("");
   const [password, setPassword] = useState<string>("");
   const [pending, setPending] = useState<boolean>(false);
+  const [error, setError] = useState<string>("");
+
+  const onPasswordSignIn = (e: React.FormEvent<HTMLElement>) => {
+    e.preventDefault();
+    setPending(true);
+
+    signIn("password", { email, password, flow: "signIn" })
+      .catch(() => {
+        setError("Invalid Email or Password");
+      })
+      .finally(() => {
+        setPending(false);
+      });
+  };
 
   const onProviderSignIn = (provider: "github" | "google") => {
     setPending(true);
@@ -38,11 +53,16 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
           Use your email or another service to continue
         </CardDescription>
       </CardHeader>
-
+      {!!error && (
+        <div className="flex bg-destructive/15 p-3 rounded-md items-center gap-x-2 text-sm text-destructive mb-6">
+          <TriangleAlert className="size-4" /> {/** A self closing tag */}
+          <p>{error}</p>
+        </div>
+      )}
       <CardContent className="space-y-5 px-0 pb-0">
-        <form className="space-y-2.5">
+        <form onSubmit={onPasswordSignIn} className="space-y-2.5">
           <Input
-            disabled={false}
+            disabled={pending}
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             placeholder="Email"
@@ -50,7 +70,7 @@ export const SignInCard = ({ setState }: SignInCardProps) => {
             required
           />
           <Input
-            disabled={false}
+            disabled={pending}
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             placeholder="Password"
