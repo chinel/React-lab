@@ -4,7 +4,7 @@ import { Inter, Roboto } from "next/font/google";
 import localFont from "next/font/local";
 import Navbar from "./Navbar";
 import { Suspense } from "react";
-import AuthProvider from "./auth/provider";
+import AuthProvider from "./auth/Provider";
 import Script from "next/script";
 import GoogleAnalyticsScript from "./GoogleAnalyticsScript";
 

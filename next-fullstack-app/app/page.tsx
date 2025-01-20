@@ -1,15 +1,15 @@
 import Image from "next/image";
 import ProductCard from "./components/ProductCard";
 import { getServerSession } from "next-auth";
-import { authOptions } from "./api/auth/[...nextauth]/route";
 import TopImage from "@/public/images/top.jpeg";
 import { Metadata } from "next";
 import dynamic from "next/dynamic";
 import _ from "lodash";
+import { authOptions } from "./api/auth/authOptions";
 
 const HeavyComponent = dynamic(() => import("./components/HeavyComponent"), {
   loading: () => <p>Loading...</p>,
-  ssr: false,
+  // ssr: false,
 });
 // import HeavyComponent from "./components/HeavyComponent";
 
