@@ -9,7 +9,7 @@ interface Props {
 
 export async function GET(request: NextRequest, props: Props) {
   const { id } = await props.params;
-  console.log(id);
+  // console.log(id);
   const product = await prisma.product.findUnique({
     where: {
       id: parseInt(id),
