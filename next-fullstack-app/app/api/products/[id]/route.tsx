@@ -76,7 +76,7 @@ export async function PUT(request: NextRequest, props: Props) {
 
 export async function DELETE(request: NextRequest, props: Props) {
   const { id } = await props.params;
-  console.log(id);
+  //console.log(id);
   const product = await prisma.product.findUnique({
     where: {
       id: parseInt(id),
