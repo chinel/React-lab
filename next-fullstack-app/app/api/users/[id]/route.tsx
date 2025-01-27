@@ -10,7 +10,7 @@ interface Props {
 
 export async function GET(request: NextRequest, { params }: Props) {
   const { id } = await params;
-  console.log(id);
+  //console.log(id);
 
   //Fetch Data from the DB
   const user = await prisma.userOld.findUnique({
