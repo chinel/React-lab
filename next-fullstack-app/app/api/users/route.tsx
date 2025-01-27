@@ -10,7 +10,7 @@ export async function GET(request: NextRequest) {
 export async function POST(request: NextRequest) {
   //To get the request body
   const body = await request.json();
-  console.log(body);
+  //console.log(body);
 
   const validation = schema.safeParse(body);
   //validate the body of the data
