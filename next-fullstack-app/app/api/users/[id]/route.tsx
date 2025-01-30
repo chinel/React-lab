@@ -31,7 +31,7 @@ export async function GET(request: NextRequest, { params }: Props) {
 export async function PUT(request: NextRequest, { params }: Props) {
   const { id } = await params;
   const body = await request.json();
-  console.log(id);
+  // console.log(id);
   //If the request body is not valid, return 400
   const validation = schema.safeParse(body);
 
