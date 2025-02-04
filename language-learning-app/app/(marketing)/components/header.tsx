@@ -26,6 +26,13 @@ const Header = () => {
           <SignedIn>
             <UserButton />
           </SignedIn>
+          <SignedOut>
+            <SignInButton
+              mode="modal"
+              forceRedirectUrl="/learn"
+              signUpForceRedirectUrl="/learn"
+            ></SignInButton>
+          </SignedOut>
         </ClerkLoaded>
       </div>
     </header>
