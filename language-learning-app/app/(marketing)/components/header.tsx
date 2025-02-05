@@ -1,3 +1,4 @@
+import { Button } from "@/components/ui/button";
 import {
   ClerkLoaded,
   ClerkLoading,
@@ -30,8 +31,12 @@ const Header = () => {
             <SignInButton
               mode="modal"
               forceRedirectUrl="/learn"
-              signUpForceRedirectUrl="/learn"
-            ></SignInButton>
+              signUpFallbackRedirectUrl="/learn"
+            >
+              <Button size="lg" variant="ghost">
+                Login
+              </Button>
+            </SignInButton>
           </SignedOut>
         </ClerkLoaded>
       </div>
