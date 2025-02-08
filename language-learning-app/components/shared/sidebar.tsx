@@ -1,10 +1,36 @@
 import { cn } from "@/lib/utils";
 import Image from "next/image";
 import Link from "next/link";
+import { ClerkLoading, ClerkLoaded, UserButton } from "@clerk/nextjs";
+import { Loader } from "lucide-react";
+import SidebarItem from "./sidebarItem";
 
 type Props = {
   className?: string;
 };
+
+const sidebarMenus = [
+  {
+    label: "Learn",
+    href: "/learn",
+    iconSrc: "/learn.svg",
+  },
+  {
+    label: "Leaderboard",
+    href: "/leaderboard",
+    iconSrc: "/leaderboard.svg",
+  },
+  {
+    label: "Quests",
+    href: "/quests",
+    iconSrc: "/quests.svg",
+  },
+  {
+    label: "Shop",
+    href: "/shop",
+    iconSrc: "/shop.svg",
+  },
+];
 
 const Sidebar = ({ className }: Props) => {
   return (
@@ -23,7 +49,17 @@ const Sidebar = ({ className }: Props) => {
         </div>
       </Link>
       <div className="flex flex-col gap-y-2 flex-1">
-        <SidebarItem />
+        {sidebarMenus.map((menu) => (
+          <SidebarItem key={menu.label} {...menu} />
+        ))}
+      </div>
+      <div className="p-4 ">
+        <ClerkLoading>
+          <Loader className="w-5 h-5 text-muted-foreground animate-spin" />
+        </ClerkLoading>
+        <ClerkLoaded>
+          <UserButton />
+        </ClerkLoaded>
       </div>
     </div>
   );
