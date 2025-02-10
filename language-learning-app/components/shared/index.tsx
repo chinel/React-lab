@@ -4,3 +4,4 @@ export { default as MobileSidebar } from "./mobileSidebar";
 export { default as SidebarItem } from "./sidebarItem";
 export { default as StickyWrapper } from "./stickyWrapper";
 export { default as FeedWrapper } from "./feedWrapper";
+export { default as UserProgress } from "./user-progress";
