@@ -1,4 +1,6 @@
+import { relations } from "drizzle-orm";
 import { pgTable, serial, text, timestamp } from "drizzle-orm/pg-core";
+import { userProgress } from "./user-progress";
 
 //create a courses table
 export const courses = pgTable("courses", {
@@ -8,3 +10,7 @@ export const courses = pgTable("courses", {
   created_at: timestamp("created_at").notNull().defaultNow(),
   updated_at: timestamp("updated_at").notNull().defaultNow(),
 });
+
+export const coursesRelations = relations(courses, ({ many }) => ({
+  userProgress: many(userProgress),
+}));
