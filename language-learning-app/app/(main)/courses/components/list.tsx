@@ -4,6 +4,8 @@ import { courses, userProgress } from "@/db/schema";
 import Card from "./card";
 import { useRouter } from "next/navigation"; // this is the new import the old import is next router
 import { useTransition } from "react";
+import { upsertUserProgress } from "@/actions/user-progress";
+import { toast } from "sonner";
 
 type Props = {
   courses: (typeof courses.$inferSelect)[];
@@ -23,7 +25,7 @@ const List = ({ courses, activeCourseId }: Props) => {
     }
 
     startTransition(() => {
-      router.push(`/courses/${id}`);
+      upsertUserProgress(id).catch(() => toast.error("Something went wrong."));
     });
   };
   return (
@@ -33,8 +35,8 @@ const List = ({ courses, activeCourseId }: Props) => {
           {/*Card component automatically becomes client component except if passed via children props */}
           <Card
             key={course.id}
-            onClick={() => {}}
-            disabled={false}
+            onClick={onClick}
+            disabled={pending}
             active={course.id === activeCourseId}
             {...course}
           />
