@@ -2,7 +2,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { userProgress } from "./schema";
+import { courses, userProgress } from "./schema";
 
 export const getUserProgress = cache(async () => {
   try {
@@ -47,5 +47,33 @@ export const getCourses = cache(async () => {
   } catch (error) {
     console.error("Error fetching courses:", error);
     return [];
+  }
+});
+
+export const getCourseById = cache(async (courseId: number) => {
+  try {
+    const data = await db.query.courses.findFirst({
+      where: eq(courses.id, courseId),
+      // with: {
+      //   units: {
+      //     with: {
+      //       lessons: {
+      //         with: {
+      //           challenges: {
+      //             with: {
+      //               challengeOptions: true,
+      //             },
+      //           },
+      //         },
+      //       },
+      //     },
+      //   },
+      // },
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching course by ID:", error);
+    return null;
   }
 });
