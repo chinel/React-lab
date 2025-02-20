@@ -27,7 +27,7 @@ const List = ({ courses, activeCourseId }: Props) => {
     startTransition(() => {
       upsertUserProgress(id).catch((e) => {
         if (e.message !== "NEXT_REDIRECT") {
-          console.log(e.message);
+          // console.log(e.message);
           toast.error(`Something went wrong ${e}`);
         }
       });
