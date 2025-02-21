@@ -2,7 +2,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { courses, userProgress } from "./schema";
+import { courses, units, userProgress } from "./schema";
 
 export const getUserProgress = cache(async () => {
   try {
@@ -75,5 +75,41 @@ export const getCourseById = cache(async (courseId: number) => {
   } catch (error) {
     console.error("Error fetching course by ID:", error);
     return null;
+  }
+});
+
+export const getUnits = cache(async () => {
+  try {
+    const userProgress = await getUserProgress();
+
+    if (!userProgress?.activeCourseId) {
+      return [];
+    }
+
+    const data = await db.query.units.findMany({
+      where: eq(units.courseId, userProgress.activeCourseId),
+      with: {
+        lessons: {
+          with: {
+            challenges: {
+              with: {
+                challengeOptions: true,
+              },
+            },
+          },
+        },
+      },
+      // Add ordering if needed
+      // orderBy: {
+      //   id: 'asc'
+      // },
+      // Add limit if you don't need all records
+      limit: 100,
+    });
+
+    return data;
+  } catch (error) {
+    console.error("Error fetching units:", error);
+    return [];
   }
 });
