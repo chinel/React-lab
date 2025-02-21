@@ -2,7 +2,7 @@ import { cache } from "react";
 import db from "./drizzle";
 import { auth } from "@clerk/nextjs/server";
 import { eq } from "drizzle-orm";
-import { courses, userProgress } from "./schema";
+import { courses, units, userProgress } from "./schema";
 
 export const getUserProgress = cache(async () => {
   try {
@@ -75,5 +75,59 @@ export const getCourseById = cache(async (courseId: number) => {
   } catch (error) {
     console.error("Error fetching course by ID:", error);
     return null;
+  }
+});
+
+export const getUnits = cache(async () => {
+  try {
+    const userProgress = await getUserProgress();
+
+    if (!userProgress?.activeCourseId) {
+      return [];
+    }
+
+    const data = await db.query.units.findMany({
+      where: eq(units.courseId, userProgress.activeCourseId),
+      with: {
+        lessons: {
+          with: {
+            challenges: {
+              with: {
+                challengeProgress: true,
+              },
+            },
+          },
+        },
+      },
+      // Add ordering if needed
+      // orderBy: {
+      //   id: 'asc'
+      // },
+      // Add limit if you don't need all records
+      limit: 100,
+    });
+
+    const normalizeData = data.map((unit) => {
+      const lessonsWithCompletedStatus = unit.lessons.map((lesson) => {
+        if (lesson.challenges.length === 0)
+          return { ...lesson, completed: false };
+
+        const allCompleted = lesson.challenges.every((challenge) => {
+          return (
+            challenge.challengeProgress &&
+            challenge.challengeProgress.length > 0 &&
+            challenge.challengeProgress.every((progress) => progress.completed)
+          );
+        });
+
+        return { ...lesson, completed: allCompleted };
+      });
+
+      return { ...unit, lessons: lessonsWithCompletedStatus };
+    });
+    return normalizeData;
+  } catch (error) {
+    console.error("Error fetching units:", error);
+    return [];
   }
 });
