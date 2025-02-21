@@ -93,7 +93,7 @@ export const getUnits = cache(async () => {
           with: {
             challenges: {
               with: {
-                challengeOptions: true,
+                challengeProgress: true,
               },
             },
           },
@@ -107,7 +107,25 @@ export const getUnits = cache(async () => {
       limit: 100,
     });
 
-    return data;
+    const normalizeData = data.map((unit) => {
+      const lessonsWithCompletedStatus = unit.lessons.map((lesson) => {
+        if (lesson.challenges.length === 0)
+          return { ...lesson, completed: false };
+
+        const allCompleted = lesson.challenges.every((challenge) => {
+          return (
+            challenge.challengeProgress &&
+            challenge.challengeProgress.length > 0 &&
+            challenge.challengeProgress.every((progress) => progress.completed)
+          );
+        });
+
+        return { ...lesson, completed: allCompleted };
+      });
+
+      return { ...unit, lessons: lessonsWithCompletedStatus };
+    });
+    return normalizeData;
   } catch (error) {
     console.error("Error fetching units:", error);
     return [];
