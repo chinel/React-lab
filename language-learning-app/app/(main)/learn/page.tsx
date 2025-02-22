@@ -1,7 +1,7 @@
 import { FeedWrapper, StickyWrapper, UserProgress } from "@/components/shared";
 import { getUnits, getUserProgress } from "@/db/queries";
 import { redirect } from "next/navigation";
-import { Header } from "./components";
+import { Header, Unit } from "./components";
 
 const LearnPage = async () => {
   const [userProgress, units] = await Promise.all([
@@ -30,16 +30,15 @@ const LearnPage = async () => {
         {units.length > 0 &&
           units.map((unit) => (
             <div key={unit.id} className="mb-10">
-              <div className="flex items-center gap-x-2">
-                <div className="flex-1">
-                  <div className="font-medium text-neutral-700">
-                    {unit.title}
-                  </div>
-                </div>
-                <div className="text-sm font-medium">
-                  {unit.lessons.length} lessons
-                </div>
-              </div>
+              <Unit
+                id={unit.id}
+                order={unit.order}
+                description={unit.description}
+                lessons={unit.lessons}
+                title={unit.title}
+                activeLesson={undefined}
+                activeLessonPercentage={0}
+              />
             </div>
           ))}
       </FeedWrapper>
