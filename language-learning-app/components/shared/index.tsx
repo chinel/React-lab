@@ -5,3 +5,4 @@ export { default as SidebarItem } from "./sidebarItem";
 export { default as StickyWrapper } from "./stickyWrapper";
 export { default as FeedWrapper } from "./feedWrapper";
 export { default as UserProgress } from "./user-progress";
+export { default as ExitModal } from "./modals/exit-modal";
