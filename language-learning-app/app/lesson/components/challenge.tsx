@@ -18,6 +18,7 @@ const Challenge = ({
   disabled,
   type,
 }: Props) => {
+  console.log("options", options);
   return (
     <>
       {/**Make sure there is no space in the square bracket grid-cols-[repeat] else it won't work */}
