@@ -16,7 +16,7 @@ type Props = {
 };
 const Card = ({
   audioSrc,
-  imgSrc,
+  imageSrc,
   shortcut,
   text,
   type,
@@ -26,6 +26,8 @@ const Card = ({
   selected,
   status,
 }: Props) => {
+  console.log(imageSrc);
+
   return (
     <div
       onClick={() => {}}
@@ -42,9 +44,9 @@ const Card = ({
         type === "ASSIST" && "lg:p-3 w-full"
       )}
     >
-      {imgSrc && (
+      {imageSrc && (
         <div className="relative aspect-square mb-4 max-h-[80px] lg:max-h-[150] w-full">
-          <Image src={imgSrc} fill alt={text} />
+          <Image src={imageSrc} fill alt={text} />
         </div>
       )}
     </div>
