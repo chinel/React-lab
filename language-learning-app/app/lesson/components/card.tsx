@@ -1,6 +1,8 @@
 import { challenges } from "@/db/schema";
 import { cn } from "@/lib/utils";
 import Image from "next/image";
+import { use, useCallback } from "react";
+import { useAudio, useKey } from "react-use";
 
 type Props = {
   id?: number;
@@ -26,11 +28,22 @@ const Card = ({
   selected,
   status,
 }: Props) => {
-  console.log(imageSrc);
+  const [audio, _, controls] = useAudio({
+    src: audioSrc || "",
+    autoPlay: false,
+  });
+  const handleClick = useCallback(() => {
+    if (disabled) return;
+
+    controls.play();
+    onClick?.();
+  }, [disabled, onClick, controls]);
+
+  useKey(shortcut, handleClick, {}, [handleClick]);
 
   return (
     <div
-      onClick={() => {}}
+      onClick={handleClick}
       className={cn(
         "h-full border-2 rounded-xl bg-white border-b-4 hover:bg-black/5 p-4 lg:p-6 cursor-pointer active:border-b-2",
         selected && "border-sky-300 bg-sky-100 hover:bg-sky-100",
@@ -44,6 +57,8 @@ const Card = ({
         type === "ASSIST" && "lg:p-3 w-full"
       )}
     >
+      {/**The audio can be added anywhere it just an invisible audio player */}
+      {audioSrc && <div className="mb-4">{audio}</div>}
       {imageSrc && (
         <div className="relative aspect-square mb-4 max-h-[150] w-full">
           <Image
