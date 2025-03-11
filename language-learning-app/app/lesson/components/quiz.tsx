@@ -50,6 +50,41 @@ const Quiz = ({
 
     setSelectedOption(id);
   };
+
+  const onNext = () => {
+    setActiveIndex((prev) => prev + 1);
+  };
+
+  const onContinue = () => {
+    if (!selectedOption) return;
+
+    if (status === "wrong") {
+      setStatus("none");
+      setSelectedOption(undefined);
+      return;
+    }
+
+    if (status === "correct") {
+      onNext();
+      setStatus("none");
+      setSelectedOption(undefined);
+      return;
+    }
+
+    const correctOption = options.find((option) => option.correct);
+    if (!correctOption) {
+      return;
+    }
+    if (correctOption && correctOption?.id === selectedOption) {
+      console.log("correct");
+      //setPercentage((prev) => prev + 100 / challenges.length);
+      //setStatus("correct");
+    } else {
+      console.log("incorrect");
+      //   setHearts((prev) => Math.max(prev - 1, 0));
+      //   setStatus("wrong");
+    }
+  };
   return (
     <>
       <Header
@@ -79,7 +114,7 @@ const Quiz = ({
           </div>
         </div>
       </div>
-      <Footer disabled={!selectedOption} status={status} onCheck={() => {}} />
+      <Footer disabled={!selectedOption} status={status} onCheck={onContinue} />
     </>
   );
 };
