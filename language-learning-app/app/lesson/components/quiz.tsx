@@ -1,7 +1,7 @@
 "use client";
 
 import { challengeOptions, challenges } from "@/db/schema";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import Header from "./header";
 import QuestionBubble from "./question-bubble";
 import Challenge from "./challenge";
@@ -25,6 +25,7 @@ const Quiz = ({
   intitialLessonId,
   userSubscription,
 }: Props) => {
+  const [pending, startTransition] = useTransition();
   const [hearts, setHearts] = useState(initialHearts);
   const [percentage, setPercentage] = useState(initialPercentage);
   const [challenges, setChallenges] = useState(initialLessonChallenges);
