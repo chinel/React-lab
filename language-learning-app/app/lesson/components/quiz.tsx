@@ -6,6 +6,8 @@ import Header from "./header";
 import QuestionBubble from "./question-bubble";
 import Challenge from "./challenge";
 import Footer from "./footer";
+import { upsertChallengeProgress } from "@/actions/challenge-progress";
+import { toast } from "sonner";
 
 type Props = {
   intitialLessonId: number;
@@ -77,7 +79,27 @@ const Quiz = ({
       return;
     }
     if (correctOption && correctOption?.id === selectedOption) {
-      console.log("correct");
+      startTransition(() => {
+        upsertChallengeProgress(challenge.id)
+          .then((response) => {
+            if (response?.error === "hearts") {
+              console.error("Missing Hearts.");
+              return;
+            }
+
+            setPercentage((prev) => prev + 100 / challenges.length);
+            setStatus("correct");
+
+            //This is a practice if percentage is 100
+            if (initialPercentage === 100) {
+              setHearts((prev) => Math.min(prev + 1, 5));
+            }
+          })
+          .catch((error) => {
+            toast.error("Something went wrong. Please try again.");
+            console.error("Error updating challenge progress:", error);
+          });
+      });
       //setPercentage((prev) => prev + 100 / challenges.length);
       //setStatus("correct");
     } else {
