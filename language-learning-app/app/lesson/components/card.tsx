@@ -58,8 +58,8 @@ const Card = ({
       )}
     >
       {/**The audio can be added anywhere it just an invisible audio player */}
-      {audioSrc && <div className="mb-4">{audio}</div>}
-      {imageSrc && (
+      {audioSrc && <div>{audio}</div>}
+      {imageSrc && type === "SELECT" && (
         <div className="relative aspect-square mb-4 max-h-[150] w-full">
           <Image
             src={imageSrc}
