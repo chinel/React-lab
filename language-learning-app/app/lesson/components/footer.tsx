@@ -10,6 +10,7 @@ type Props = {
   lessonId?: number;
 };
 const Footer = ({ disabled, status, onCheck, lessonId }: Props) => {
+  console.log("status", status);
   useKey("Enter", onCheck, {}, [onCheck]);
   const isMobile = useMedia("(max-width: 1024px)");
   return (
