@@ -8,6 +8,7 @@ import Challenge from "./challenge";
 import Footer from "./footer";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { toast } from "sonner";
+import { reduceHearts } from "@/actions/user-progress";
 
 type Props = {
   intitialLessonId: number;
@@ -103,9 +104,24 @@ const Quiz = ({
       //setPercentage((prev) => prev + 100 / challenges.length);
       //setStatus("correct");
     } else {
-      console.log("incorrect");
-      //   setHearts((prev) => Math.max(prev - 1, 0));
-      //   setStatus("wrong");
+      startTransition(() => {
+        reduceHearts(challenge.id)
+          .then((response) => {
+            if (response?.error === "hearts") {
+              console.error("Missing Hearts.");
+              return;
+            }
+
+            setStatus("wrong");
+
+            if (!response?.error) {
+              setHearts((prev) => Math.max(prev - 1, 0));
+            }
+          })
+          .catch(() => {
+            toast.error("Something went wrong. Please try again.");
+          });
+      });
     }
   };
   return (
