@@ -75,10 +75,21 @@ export const reduceHearts = async (challengeId: number) => {
   const isPractice = !!existingChallengeProgress;
 
   if (isPractice) {
-    return { error: "Practice" };
+    return { error: "practice" };
   }
 
   if (!currentUserProgress) {
     throw new Error("User progress not found");
   }
+
+  //Todo handle Subscription
+
+  if (currentUserProgress.hearts === 0) {
+    return { error: "hearts" };
+  }
+
+  await db
+    .update(userProgress)
+    .set({ hearts: Math.max(currentUserProgress.hearts - 1, 0) }) // if there is a potential -anything then 0 will be the max
+    .where(eq(userProgress.userId, userId));
 };
