@@ -9,6 +9,7 @@ import Footer from "./footer";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { toast } from "sonner";
 import { reduceHearts } from "@/actions/user-progress";
+import { useAudio } from "react-use";
 
 type Props = {
   intitialLessonId: number;
@@ -28,6 +29,12 @@ const Quiz = ({
   intitialLessonId,
   userSubscription,
 }: Props) => {
+  const [correctAudio, _c, correctControls] = useAudio({
+    src: "/correct.wav",
+  });
+  const [incorrectAudio, _i, incorrectControls] = useAudio({
+    src: "/incorrect.wav",
+  });
   const [pending, startTransition] = useTransition();
   const [hearts, setHearts] = useState(initialHearts);
   const [percentage, setPercentage] = useState(initialPercentage);
@@ -88,6 +95,7 @@ const Quiz = ({
               return;
             }
 
+            correctControls.play();
             setPercentage((prev) => prev + 100 / challenges.length);
             setStatus("correct");
 
@@ -112,6 +120,7 @@ const Quiz = ({
               return;
             }
 
+            incorrectControls.play();
             setStatus("wrong");
 
             if (!response?.error) {
@@ -126,6 +135,10 @@ const Quiz = ({
   };
   return (
     <>
+      {/**Render the audios */}
+      {incorrectAudio}
+      {correctAudio}
+
       <Header
         hearts={hearts}
         percentage={percentage}
