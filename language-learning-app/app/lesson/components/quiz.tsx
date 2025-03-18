@@ -11,6 +11,7 @@ import { toast } from "sonner";
 import { reduceHearts } from "@/actions/user-progress";
 import { useAudio } from "react-use";
 import Image from "next/image";
+import ResultCard from "./result-card";
 
 type Props = {
   intitialLessonId: number;
@@ -74,7 +75,7 @@ const Quiz = ({
             Great Job! <br /> You&apos;ve completed the lesson.
           </h1>
           <div className="flex items-center gap-x-4  w-full">
-            <Result variant="points" value={challenges.length * 10} />
+            <ResultCard variant="points" value={challenges.length * 10} />
           </div>
         </div>
       </>
