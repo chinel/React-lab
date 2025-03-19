@@ -1,5 +1,5 @@
 "use client";
-
+import Confetti from "react-confetti";
 import { challengeOptions, challenges } from "@/db/schema";
 import { useState, useTransition } from "react";
 import Header from "./header";
@@ -9,8 +9,10 @@ import Footer from "./footer";
 import { upsertChallengeProgress } from "@/actions/challenge-progress";
 import { toast } from "sonner";
 import { reduceHearts } from "@/actions/user-progress";
-import { useAudio } from "react-use";
+import { useAudio, useWindowSize } from "react-use";
 import Image from "next/image";
+import ResultCard from "./result-card";
+import { useRouter } from "next/navigation";
 
 type Props = {
   intitialLessonId: number;
@@ -30,12 +32,15 @@ const Quiz = ({
   intitialLessonId,
   userSubscription,
 }: Props) => {
+  const { width, height } = useWindowSize();
+  const router = useRouter();
   const [correctAudio, _c, correctControls] = useAudio({
     src: "/correct.wav",
   });
   const [incorrectAudio, _i, incorrectControls] = useAudio({
     src: "/incorrect.wav",
   });
+  const [lessonId] = useState(intitialLessonId);
   const [pending, startTransition] = useTransition();
   const [hearts, setHearts] = useState(initialHearts);
   const [percentage, setPercentage] = useState(initialPercentage);
@@ -52,9 +57,16 @@ const Quiz = ({
   const challenge = challenges[activeIndex];
   const options = challenge?.challengeOptions || [];
 
-  if (!challenge) {
+  if (true || !challenge) {
     return (
       <>
+        <Confetti
+          recycle={false}
+          numberOfPieces={500}
+          tweenDuration={10000}
+          width={width}
+          height={height}
+        />
         <div className="flex flex-col gap-y-4 lg:gap-y-8 max-w-lg mx-auto text-center items-center justify-center h-full">
           <Image
             src="/finish.svg"
@@ -74,9 +86,15 @@ const Quiz = ({
             Great Job! <br /> You&apos;ve completed the lesson.
           </h1>
           <div className="flex items-center gap-x-4  w-full">
-            <Result variant="points" value={challenges.length * 10} />
+            <ResultCard variant="points" value={challenges.length * 10} />
+            <ResultCard variant="hearts" value={hearts} />
           </div>
         </div>
+        <Footer
+          lessonId={lessonId}
+          status="completed"
+          onCheck={() => router.push("/learn")}
+        />
       </>
     );
   }
