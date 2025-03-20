@@ -7,3 +7,4 @@ export { default as FeedWrapper } from "./feedWrapper";
 export { default as UserProgress } from "./user-progress";
 export { default as ExitModal } from "./modals/exit-modal";
 export { default as HeartsModal } from "./modals/hearts-modal";
+export { default as PracticeModal } from "./modals/practice-modal";
