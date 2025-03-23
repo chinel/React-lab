@@ -11,3 +11,4 @@ export {
   challengeProgress,
   challengeProgressRelations,
 } from "./challengeProgress";
+export { userSubscription } from "./userSubscription";

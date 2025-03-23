@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { POINTS_TO_REFIL } from "@/lib/constants";
 import Image from "next/image";
 import { useTransition } from "react";
+import { start } from "repl";
 import { toast } from "sonner";
 
 type Props = {
@@ -24,6 +25,10 @@ const Items = ({ hasActiveSubscription, hearts, points }: Props) => {
         toast.error("Something went wrong. Please try again later.");
       });
     });
+  };
+
+  const onUpgrade = () => {
+    startTransition(() => {});
   };
 
   return (
@@ -47,6 +52,17 @@ const Items = ({ hasActiveSubscription, hearts, points }: Props) => {
               <p>{POINTS_TO_REFIL}</p>
             </div>
           )}
+        </Button>
+      </li>
+      <li className="flex items-center w-full p-4 pt-8 gap-x-4 border-t-2">
+        <Image src="/unlimited.svg" alt="Unlimited" height={60} width={60} />
+        <div className="flex-1">
+          <p className="text-neutral-700 text-base lg:text-xl font-bold">
+            Unlimited hearts
+          </p>
+        </div>
+        <Button onClick={onUpgrade} disabled={pending || hasActiveSubscription}>
+          {hasActiveSubscription ? "active" : "upgrade"}
         </Button>
       </li>
     </ul>
