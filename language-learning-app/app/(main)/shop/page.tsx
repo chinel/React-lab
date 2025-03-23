@@ -1,17 +1,22 @@
 import { FeedWrapper, StickyWrapper, UserProgress } from "@/components/shared";
-import { getUserProgress } from "@/db/queries";
+import { getUserProgress, getUserSubscription } from "@/db/queries";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Items } from "./components";
 
 const ShopPage = async () => {
-  const [userProgress] = await Promise.all([getUserProgress()]);
+  const [userProgress, userSubscription] = await Promise.all([
+    getUserProgress(),
+    getUserSubscription(),
+  ]);
 
   if (!userProgress || !userProgress.activeCourse) {
     redirect("/courses");
   }
 
   const { activeCourse, hearts, points } = userProgress;
+
+  const isPro = !!userSubscription?.isActive;
 
   return (
     <div className="flex flex-row-reverse gap-[48px] px-6">
@@ -20,7 +25,7 @@ const ShopPage = async () => {
           activeCourse={activeCourse}
           hearts={hearts}
           points={points}
-          hasActiveSubscription={false}
+          hasActiveSubscription={isPro}
         />
       </StickyWrapper>
       <FeedWrapper>
@@ -35,8 +40,9 @@ const ShopPage = async () => {
           <Items
             points={points}
             hearts={hearts}
-            hasActiveSubscription={false}
+            hasActiveSubscription={isPro}
           />
+          {/**userSubscription could be null since we are use ? so we need to convert the final value to boolean */}
         </div>
       </FeedWrapper>
     </div>

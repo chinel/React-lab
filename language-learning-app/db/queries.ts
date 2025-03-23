@@ -8,7 +8,10 @@ import {
   lessons,
   units,
   userProgress,
+  userSubscription,
 } from "./schema";
+
+const DAY_IN_MS = 86_400_000; //it is the same as writing 86400000, only that it is more readable, you can do that in javascript, separate numbers by underscore
 
 export const getUserProgress = cache(async () => {
   try {
@@ -262,4 +265,29 @@ export const getLessonPercentage = cache(async () => {
     console.error("Error fetching lesson percentage:", error);
     return 0;
   }
+});
+
+export const getUserSubscription = cache(async () => {
+  const { userId } = await auth();
+
+  if (!userId) {
+    return null;
+  }
+
+  const data = await db.query.userSubscription.findFirst({
+    where: eq(userSubscription.userId, userId),
+  });
+
+  if (!data) {
+    return null;
+  }
+
+  const isActive =
+    data.stripePriceId &&
+    data.stripeCurrentPeriodEnd.getTime()! + DAY_IN_MS > Date.now(); // If the current date plus an extra day for buffering is still greater than today, subscription is still active
+
+  return {
+    ...data,
+    isActive: !!isActive,
+  };
 });
