@@ -1,11 +1,11 @@
 "use client";
 
 import { refillHearts } from "@/actions/user-progress";
+import { createStripeUrl } from "@/actions/user-subscription";
 import { Button } from "@/components/ui/button";
 import { POINTS_TO_REFIL } from "@/lib/constants";
 import Image from "next/image";
 import { useTransition } from "react";
-import { start } from "repl";
 import { toast } from "sonner";
 
 type Props = {
@@ -28,7 +28,19 @@ const Items = ({ hasActiveSubscription, hearts, points }: Props) => {
   };
 
   const onUpgrade = () => {
-    startTransition(() => {});
+    startTransition(() => {
+      createStripeUrl()
+        .then((response) => {
+          if (response.data) {
+            window.location.href = response.data;
+          } else {
+            toast.error("Something went wrong. Please try again later.");
+          }
+        })
+        .catch(() => {
+          toast.error("Something went wrong. Please try again later.");
+        });
+    });
   };
 
   return (
