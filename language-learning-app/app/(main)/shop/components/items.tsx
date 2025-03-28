@@ -73,8 +73,8 @@ const Items = ({ hasActiveSubscription, hearts, points }: Props) => {
             Unlimited hearts
           </p>
         </div>
-        <Button onClick={onUpgrade} disabled={pending || hasActiveSubscription}>
-          {hasActiveSubscription ? "active" : "upgrade"}
+        <Button onClick={onUpgrade} disabled={pending}>
+          {hasActiveSubscription ? "settings" : "upgrade"}
         </Button>
       </li>
     </ul>
