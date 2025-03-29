@@ -1,4 +1,4 @@
-import { getLesson, getUserProgress } from "@/db/queries";
+import { getLesson, getUserProgress, getUserSubscription } from "@/db/queries";
 import { redirect } from "next/navigation";
 import React from "react";
 import { Quiz } from "../components";
@@ -10,9 +10,10 @@ type Props = {
 };
 
 const LessonIdPage = async ({ params }: Props) => {
-  const [lesson, userProgress] = await Promise.all([
+  const [lesson, userProgress, userSubscription] = await Promise.all([
     getLesson(params.lessonId),
     getUserProgress(),
+    getUserSubscription(),
   ]);
 
   if (!lesson || !userProgress) {
@@ -30,7 +31,7 @@ const LessonIdPage = async ({ params }: Props) => {
       initialLessonChallenges={lesson.challenges}
       initialHearts={userProgress.hearts}
       initialPercentage={initialPercentage}
-      userSubscription={undefined} // Todo Add user susbcription
+      userSubscription={userSubscription}
     />
   );
 };

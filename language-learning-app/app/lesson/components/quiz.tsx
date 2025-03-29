@@ -1,6 +1,6 @@
 "use client";
 import Confetti from "react-confetti";
-import { challengeOptions, challenges } from "@/db/schema";
+import { challengeOptions, challenges, userSubscription } from "@/db/schema";
 import { useState, useTransition } from "react";
 import Header from "./header";
 import QuestionBubble from "./question-bubble";
@@ -24,7 +24,11 @@ type Props = {
   })[];
   initialHearts: number;
   initialPercentage: number;
-  userSubscription: { isActive: boolean } | undefined;
+  userSubscription:
+    | (typeof userSubscription.$inferSelect & {
+        isActive: boolean;
+      })
+    | null;
 };
 
 const Quiz = ({
@@ -104,8 +108,16 @@ const Quiz = ({
             Great Job! <br /> You&apos;ve completed the lesson.
           </h1>
           <div className="flex items-center gap-x-4  w-full">
-            <ResultCard variant="points" value={challenges.length * 10} />
-            <ResultCard variant="hearts" value={hearts} />
+            <ResultCard
+              variant="points"
+              value={challenges.length * 10}
+              hasActiveSubscription={!!userSubscription?.isActive}
+            />
+            <ResultCard
+              variant="hearts"
+              value={hearts}
+              hasActiveSubscription={!!userSubscription?.isActive}
+            />
           </div>
         </div>
         <Footer
