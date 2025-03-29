@@ -4,18 +4,25 @@ import {
   getLessonPercentage,
   getUnits,
   getUserProgress,
+  getUserSubscription,
 } from "@/db/queries";
 import { redirect } from "next/navigation";
 import { Header, Unit } from "./components";
 
 const LearnPage = async () => {
-  const [userProgress, units, courseProgress, lessonPercentage] =
-    await Promise.all([
-      getUserProgress(),
-      getUnits(),
-      getCourseProgress(),
-      getLessonPercentage(),
-    ]);
+  const [
+    userProgress,
+    units,
+    courseProgress,
+    lessonPercentage,
+    userSubscription,
+  ] = await Promise.all([
+    getUserProgress(),
+    getUnits(),
+    getCourseProgress(),
+    getLessonPercentage(),
+    getUserSubscription(),
+  ]);
 
   //checking if userProgress.activeCourse is present ensure that active
   //course is present so that we don't have to use optional chaining ? and optional properties in the type definition
@@ -30,7 +37,7 @@ const LearnPage = async () => {
           activeCourse={userProgress.activeCourse}
           hearts={userProgress.hearts}
           points={userProgress.points}
-          hasActiveSubscription={false}
+          hasActiveSubscription={!!userSubscription?.isActive}
         />
       </StickyWrapper>
       <FeedWrapper>

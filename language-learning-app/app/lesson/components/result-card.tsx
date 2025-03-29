@@ -1,12 +1,14 @@
 import { cn } from "@/lib/utils";
+import { InfinityIcon } from "lucide-react";
 import Image from "next/image";
 
 type Props = {
   value: number;
   variant: "points" | "hearts";
+  hasActiveSubscription?: boolean;
 };
 
-const ResultCard = ({ value, variant }: Props) => {
+const ResultCard = ({ value, variant, hasActiveSubscription }: Props) => {
   const imageSrc = variant === "points" ? "/points.svg" : "/heart.svg";
   return (
     <div
@@ -39,7 +41,11 @@ const ResultCard = ({ value, variant }: Props) => {
           height={30}
           className="mr-1.5"
         />
-        {value}
+        {hasActiveSubscription && variant === "hearts" ? (
+          <InfinityIcon className="h-4 w-4 stroke-[3] shrink-0" />
+        ) : (
+          value
+        )}
       </div>
     </div>
   );
