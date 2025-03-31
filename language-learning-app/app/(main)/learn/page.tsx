@@ -7,7 +7,7 @@ import {
   getUserSubscription,
 } from "@/db/queries";
 import { redirect } from "next/navigation";
-import { Header, Unit } from "./components";
+import { Header, Promo, Unit } from "./components";
 
 const LearnPage = async () => {
   const [
@@ -39,6 +39,7 @@ const LearnPage = async () => {
           points={userProgress.points}
           hasActiveSubscription={!!userSubscription?.isActive}
         />
+        <Promo />
       </StickyWrapper>
       <FeedWrapper>
         <Header title={userProgress.activeCourse.title} />
