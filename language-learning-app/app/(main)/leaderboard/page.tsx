@@ -1,4 +1,10 @@
-import { FeedWrapper, StickyWrapper, UserProgress } from "@/components/shared";
+import {
+  FeedWrapper,
+  Promo,
+  StickyWrapper,
+  UserProgress,
+} from "@/components/shared";
+import Quests from "@/components/shared/quests";
 import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 import { Separator } from "@/components/ui/separator";
 import {
@@ -33,6 +39,8 @@ const LeaderboardPage = async () => {
           points={points}
           hasActiveSubscription={isPro}
         />
+        {!isPro && <Promo />}
+        <Quests points={userProgress.points} />
       </StickyWrapper>
       <FeedWrapper>
         <div className="w-full flex flex-col items-center">

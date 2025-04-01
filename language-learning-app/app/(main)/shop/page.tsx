@@ -1,8 +1,14 @@
-import { FeedWrapper, StickyWrapper, UserProgress } from "@/components/shared";
+import {
+  FeedWrapper,
+  Promo,
+  StickyWrapper,
+  UserProgress,
+} from "@/components/shared";
 import { getUserProgress, getUserSubscription } from "@/db/queries";
 import Image from "next/image";
 import { redirect } from "next/navigation";
 import { Items } from "./components";
+import Quests from "@/components/shared/quests";
 
 const ShopPage = async () => {
   const [userProgress, userSubscription] = await Promise.all([
@@ -27,6 +33,8 @@ const ShopPage = async () => {
           points={points}
           hasActiveSubscription={isPro}
         />
+        {!isPro && <Promo />}
+        <Quests points={userProgress.points} />
       </StickyWrapper>
       <FeedWrapper>
         <div className="w-full flex flex-col items-center">
