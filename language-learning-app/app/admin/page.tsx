@@ -1,5 +1,8 @@
+import dynamic from "next/dynamic";
+const App = dynamic(() => import("./components/app"));
+
 const AdminPage = () => {
-  return <div>AdminPage</div>;
+  return <App />;
 };
 
 export default AdminPage;
