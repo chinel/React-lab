@@ -15,7 +15,10 @@ type RouteHandler = (
 
 export const withAuth =
   (handler: RouteHandler) =>
-  async (request?: NextRequest): Promise<NextResponse> => {
+  async (
+    request?: NextRequest,
+    context?: { params: { id: string } }
+  ): Promise<NextResponse> => {
     const isAdmin = await getIsAdmin();
 
     if (!isAdmin) {
@@ -25,5 +28,14 @@ export const withAuth =
       );
     }
 
-    return handler(request);
+    // Await the params before using them
+    const resolvedParams = await context?.params;
+
+    // Extract and transform the params
+    const routeParams: RouteParams = {
+      id: resolvedParams?.id,
+      query: Object.fromEntries(request?.nextUrl.searchParams ?? []),
+    };
+
+    return handler(request, routeParams);
   };
