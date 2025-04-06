@@ -9,7 +9,7 @@ import {
   TextInput,
 } from "react-admin";
 
-const UnitEdit = () => {
+const LessonEdit = () => {
   return (
     <Edit>
       <SimpleForm>
@@ -18,16 +18,11 @@ const UnitEdit = () => {
           validate={[required(), minLength(5)]}
           label="Title"
         />
-        <TextInput
-          source="description"
-          validate={[required()]}
-          label="Description"
-        />
 
-        <ReferenceInput source="courseId" reference="courses">
+        <ReferenceInput source="unitId" reference="units">
           <SelectInput
             optionText="title"
-            validate={required("Please select a course")}
+            validate={required("Please select a unit")}
           />
         </ReferenceInput>
 
@@ -37,4 +32,4 @@ const UnitEdit = () => {
   );
 };
 
-export default UnitEdit;
+export default LessonEdit;

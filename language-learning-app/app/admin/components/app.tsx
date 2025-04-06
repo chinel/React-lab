@@ -4,6 +4,8 @@ import { Admin, ListGuesser, Resource } from "react-admin";
 import simpleRestProvider from "ra-data-simple-rest";
 import { CourseCreate, CourseEdit, CourseList } from "./course";
 import { UnitCreate, UnitEdit, UnitList } from "./unit";
+import { LessonCreate, LessonEdit, LessonList } from "./lesson";
+import { ChallengeCreate, ChallengeEdit, ChallengeList } from "./challenges";
 
 const dataProvider = simpleRestProvider("/api");
 
@@ -25,6 +27,20 @@ const App = () => {
         list={UnitList}
         create={UnitCreate}
         edit={UnitEdit}
+      />
+      <Resource
+        name="lessons"
+        recordRepresentation="title"
+        list={LessonList}
+        create={LessonCreate}
+        edit={LessonEdit}
+      />
+      <Resource
+        name="challenges"
+        recordRepresentation="title"
+        list={ChallengeList}
+        create={ChallengeCreate}
+        edit={ChallengeEdit}
       />
     </Admin>
   );

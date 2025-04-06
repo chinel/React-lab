@@ -1,23 +1,23 @@
 import db from "@/db/drizzle";
-import { courses } from "@/db/schema";
+import { lessons } from "@/db/schema";
 import { withAuth } from "@/lib/protect-route";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = withAuth(async (request, params) => {
   try {
-    const data = await db.query.courses.findFirst({
-      where: (courses, { eq }) => {
+    const data = await db.query.lessons.findFirst({
+      where: (lessons, { eq }) => {
         if (!params?.id) {
-          throw new Error("Course ID is required");
+          throw new Error("Lesson ID is required");
         }
-        return eq(courses.id, parseInt(params.id));
+        return eq(lessons.id, parseInt(params.id));
       },
     });
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error fetching course:", error);
+    console.error("Error fetching lesson:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -28,23 +28,24 @@ export const GET = withAuth(async (request, params) => {
 export const PUT = withAuth(async (request, params) => {
   try {
     if (!params?.id) {
-      throw new Error("Course ID is required");
+      throw new Error("Lesson ID is required");
     }
 
     const body = await request?.json();
+
     const data = await db
-      .update(courses)
+      .update(lessons)
       .set({
         ...body,
         created_at: new Date(body.created_at),
         updated_at: new Date(),
       })
-      .where(eq(courses.id, parseInt(params.id)))
+      .where(eq(lessons.id, parseInt(params.id)))
       .returning();
 
     return NextResponse.json(data[0]);
   } catch (error) {
-    console.error("Error updating course:", error);
+    console.error("Error updating lessons:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -58,17 +59,17 @@ export const DELETE = async (
 ) => {
   try {
     if (!params?.id) {
-      throw new Error("Course ID is required");
+      throw new Error("Lesson ID is required");
     }
 
     const data = await db
-      .delete(courses)
-      .where(eq(courses.id, parseInt(params.id)))
+      .delete(lessons)
+      .where(eq(lessons.id, parseInt(params.id)))
       .returning();
 
-    return NextResponse.json(data);
+    return NextResponse.json(data[0]);
   } catch (error) {
-    console.error("Error deleting course:", error);
+    console.error("Error deleting lesson:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
