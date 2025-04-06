@@ -1,5 +1,5 @@
 import {
-  Edit,
+  Create,
   minLength,
   NumberInput,
   ReferenceInput,
@@ -9,32 +9,27 @@ import {
   TextInput,
 } from "react-admin";
 
-const UnitEdit = () => {
+const LessonCreate = () => {
   return (
-    <Edit>
+    <Create>
       <SimpleForm>
         <TextInput
           source="title"
           validate={[required(), minLength(5)]}
           label="Title"
         />
-        <TextInput
-          source="description"
-          validate={[required()]}
-          label="Description"
-        />
 
-        <ReferenceInput source="courseId" reference="courses">
+        <ReferenceInput source="unitId" reference="units">
           <SelectInput
             optionText="title"
-            validate={required("Please select a course")}
+            validate={required("Please select a unit")}
           />
         </ReferenceInput>
 
         <NumberInput source="order" validate={[required()]} label="Order" />
       </SimpleForm>
-    </Edit>
+    </Create>
   );
 };
 
-export default UnitEdit;
+export default LessonCreate;
