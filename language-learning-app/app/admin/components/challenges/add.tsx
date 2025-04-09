@@ -4,7 +4,6 @@ import {
   NumberInput,
   ReferenceInput,
   required,
-  SelectField,
   SelectInput,
   SimpleForm,
   TextInput,
