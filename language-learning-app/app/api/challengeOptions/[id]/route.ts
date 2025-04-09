@@ -1,23 +1,23 @@
 import db from "@/db/drizzle";
-import { challenges } from "@/db/schema";
+import { challengeOptions } from "@/db/schema";
 import { withAuth } from "@/lib/protect-route";
 import { eq } from "drizzle-orm";
 import { NextRequest, NextResponse } from "next/server";
 
 export const GET = withAuth(async (request, params) => {
   try {
-    const data = await db.query.challenges.findFirst({
-      where: (challenges, { eq }) => {
+    const data = await db.query.challengeOptions.findFirst({
+      where: (challengeOptions, { eq }) => {
         if (!params?.id) {
-          throw new Error("Challenge ID is required");
+          throw new Error("ChallengeOption ID is required");
         }
-        return eq(challenges.id, parseInt(params.id));
+        return eq(challengeOptions.id, parseInt(params.id));
       },
     });
 
     return NextResponse.json(data);
   } catch (error) {
-    console.error("Error fetching challenge:", error);
+    console.error("Error fetching challengeOptions:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -28,24 +28,24 @@ export const GET = withAuth(async (request, params) => {
 export const PUT = withAuth(async (request, params) => {
   try {
     if (!params?.id) {
-      throw new Error("Challenge ID is required");
+      throw new Error("ChallengeOption ID is required");
     }
 
     const body = await request?.json();
 
     const data = await db
-      .update(challenges)
+      .update(challengeOptions)
       .set({
         ...body,
         created_at: new Date(body.created_at),
         updated_at: new Date(),
       })
-      .where(eq(challenges.id, parseInt(params.id)))
+      .where(eq(challengeOptions.id, parseInt(params.id)))
       .returning();
 
     return NextResponse.json(data[0]);
   } catch (error) {
-    console.error("Error updating challenges:", error);
+    console.error("Error updating challengeOptions:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
@@ -59,17 +59,17 @@ export const DELETE = async (
 ) => {
   try {
     if (!params?.id) {
-      throw new Error("Challenge ID is required");
+      throw new Error("ChallengeOption ID is required");
     }
 
     const data = await db
-      .delete(challenges)
-      .where(eq(challenges.id, parseInt(params.id)))
+      .delete(challengeOptions)
+      .where(eq(challengeOptions.id, parseInt(params.id)))
       .returning();
 
     return NextResponse.json(data[0]);
   } catch (error) {
-    console.error("Error deleting challenge:", error);
+    console.error("Error deleting challengeOptions:", error);
     return NextResponse.json(
       { error: "Internal server error" },
       { status: 500 }
