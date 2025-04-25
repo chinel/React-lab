@@ -33,8 +33,6 @@ export async function PUT(request: NextRequest, props: Props) {
 
   const body = await request.json();
 
-  // console.log(id);
-
   const product = await prisma.product.findUnique({
     where: {
       id: parseInt(id),
