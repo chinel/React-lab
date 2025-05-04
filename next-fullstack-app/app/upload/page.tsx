@@ -26,7 +26,7 @@ const UploadPage = () => {
         uploadPreset="next-fullstack-app"
         //  options={{sources: ["local"]}}
         onSuccess={(results, widget) => {
-          console.log(results);
+          //  console.log(results);
           const cloudinaryResults = results as UploadResult;
           if (results?.event === "success") {
             setPublicId(cloudinaryResults.info.public_id);
